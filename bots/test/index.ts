@@ -85,19 +85,19 @@ async function main() {
   }
 }
 
-async function sendInitialTestMessage(client: Client) {
-  // Send dm to the bot
-  const dm = await client.conversations.newDm(
-    process.env.CONVOS_USER as string,
-  );
+// async function sendInitialTestMessage(client: Client) {
+//   // Send dm to the bot
+//   const dm = await client.conversations.newDm(
+//     process.env.CONVOS_USER as string,
+//   );
 
-  await dm.send("gm from bot");
-  console.log("DM sent:", dm.id, "to", process.env.CONVOS_USER);
+//   await dm.send("gm from bot");
+//   console.log("DM sent:", dm.id, "to", process.env.CONVOS_USER);
 
-  const dm2 = await client.conversations.newDm(process.env.CB_USER as string);
-  await dm2.send("gm from bot");
-  console.log("DM sent:", dm2.id, "to", process.env.CB_USER);
-}
+//   const dm2 = await client.conversations.newDm(process.env.CB_USER as string);
+//   await dm2.send("gm from bot");
+//   console.log("DM sent:", dm2.id, "to", process.env.CB_USER);
+// }
 
 // Helper function to process incoming commands
 async function processCommand(

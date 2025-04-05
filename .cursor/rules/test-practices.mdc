@@ -1,0 +1,215 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# XMTP QA Testing Practices
+
+You're an expert in writing TypeScript tests for XMTP applications. Generate **high-quality tests** that adhere to the following best practices:
+
+## Test Structure
+
+1. Use Vitest as the testing framework with a consistent structure:
+
+   ```typescript
+   import { closeEnv, loadEnv } from "@helpers/client";
+   import { sendPerformanceResult, sendTestResults } from "@helpers/datadog";
+   import { logError } from "@helpers/logger";
+   import { type Conversation, type WorkerManager } from "@helpers/types";
+   import { verifyStream } from "@helpers/verify";
+   import { getWorkers } from "@workers/manager";
+   import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+   const testName = "feature-name";
+
+   describe(testName, () => {
+     loadEnv(testName);
+     let workers: WorkerManager;
+     let hasFailures: boolean = false;
+     let start: number;
+
+     beforeAll(async () => {
+       try {
+         workers = await getWorkers(["worker1", "worker2"], testName);
+         expect(workers).toBeDefined();
+       } catch (e) {
+         hasFailures = logError(e, expect);
+         throw e;
+       }
+     });
+
+     beforeEach(() => {
+       const testName = expect.getState().currentTestName;
+       start = performance.now();
+       console.time(testName);
+     });
+
+     afterEach(function () {
+       try {
+         sendPerformanceResult(expect, workers, start);
+       } catch (e) {
+         hasFailures = logError(e, expect);
+         throw e;
+       }
+     });
+
+     afterAll(async () => {
+       try {
+         sendTestResults(hasFailures, testName);
+         await closeEnv(testName, workers);
+       } catch (e) {
+         hasFailures = logError(e, expect);
+         throw e;
+       }
+     });
+
+     it("testName: should describe what the test does", async () => {
+       try {
+         // Test implementation
+         expect(result).toBeDefined();
+       } catch (e) {
+         hasFailures = logError(e, expect);
+         throw e;
+       }
+     });
+   });
+   ```
+
+2. Always include performance measurement in tests:
+   - Use `console.time(testName)` in `beforeEach`
+   - Use `sendPerformanceResult(expect, workers, start)` in `afterEach`
+   - Track failures with `hasFailures` flag
+
+3. Properly clean up resources in `afterAll`:
+   - Send test results with `sendTestResults(hasFailures, testName)`
+   - Close environment with `closeEnv(testName, workers)`
+
+## Worker Management
+
+1. Use the `WorkerManager` class to manage test participants:
+   - Initialize with `getWorkers(["worker1", "worker2"], testName)`
+   - Access workers with `workers.get("workerName")`
+   - Get all workers with `workers.getWorkers()`
+
+2. Create workers with descriptive names that indicate their role:
+   - Use names like "henry", "ivy", "jack" for consistent test participants
+   - Use "randomguy" for one-off participants
+
+3. Apply network conditions when testing network-related features:
+   ```typescript
+   workers.setWorkerNetworkConditions("workerName", {
+     latencyMs: 100,
+     packetLossRate: 0.1,
+     disconnectProbability: 0.05,
+     disconnectDurationMs: 1000,
+     bandwidthLimitKbps: 1000,
+     jitterMs: 50
+   });
+   ```
+
+## Verification Helpers
+
+1. Use the verification helpers for message testing:
+   - `verifyStream` for testing message delivery in conversations
+   - `verifyStreamAll` for testing message delivery to all participants
+   - `verifyConversationStream` for testing conversation creation and message delivery
+
+2. Use message generators for consistent test data:
+   ```typescript
+   const message = "gm-" + Math.random().toString(36).substring(2, 15);
+   ```
+
+3. Verify message delivery with appropriate assertions:
+   ```typescript
+   expect(verifyResult.messages.length).toEqual(expectedCount);
+   expect(verifyResult.allReceived).toBe(true);
+   ```
+
+## Error Handling
+
+1. Use consistent error handling pattern with try/catch blocks:
+   ```typescript
+   try {
+     // Test implementation
+   } catch (e) {
+     hasFailures = logError(e, expect);
+     throw e;
+   }
+   ```
+
+2. Use the `logError` helper to properly log errors:
+   ```typescript
+   hasFailures = logError(e, expect);
+   ```
+
+3. Always rethrow errors after logging to ensure test failure is properly reported
+
+## Test Naming
+
+1. Use descriptive test names that follow the pattern:
+   ```
+   actionName: should describe what the test verifies
+   ```
+
+2. Examples:
+   - `createDM: should measure creating a DM`
+   - `sendGM: should measure sending a gm`
+   - `receiveGM: should measure receiving a gm`
+
+## Environment Management
+
+1. Always load the appropriate environment at the start of tests:
+   ```typescript
+   loadEnv(testName);
+   ```
+
+2. Use the test name to isolate test data and prevent cross-test contamination
+
+3. Close the environment properly at the end of tests:
+   ```typescript
+   await closeEnv(testName, workers);
+   ```
+
+## Performance Testing
+
+1. Measure performance for all operations:
+   - Use `performance.now()` to track start time
+   - Send results to Datadog with `sendPerformanceResult`
+
+2. Include appropriate assertions to verify functionality:
+   - Check that objects are defined
+   - Verify expected properties exist
+   - Confirm correct message counts
+
+## Network Simulation
+
+1. Use the network simulation features to test under various conditions:
+   - Latency
+   - Packet loss
+   - Disconnections
+   - Bandwidth limitations
+   - Jitter
+
+2. Apply network conditions to specific workers or all workers:
+   ```typescript
+   // Apply to specific worker
+   workers.setWorkerNetworkConditions("workerName", conditions);
+   
+   // Apply to all workers
+   workers.applyNetworkConditionsToAll(conditions);
+   ```
+
+3. Set default network conditions for all new workers:
+   ```typescript
+   workers.setDefaultNetworkConditions(conditions);
+   ```
+
+## Test Categories
+
+1. Organize tests by feature area:
+   - `dms.test.ts` for direct message tests
+   - `groups.test.ts` for group conversation tests
+   - `offline.test.ts` for offline functionality tests
+   - `network_simulation.test.ts` for network condition tests
+
+2. Use consistent patterns across test categories while adapting to specific feature requirements 

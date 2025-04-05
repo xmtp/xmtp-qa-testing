@@ -1,5 +1,4 @@
 import { closeEnv, loadEnv } from "@helpers/client";
-import { sendTestResults } from "@helpers/datadog";
 import { logError } from "@helpers/logger";
 import { IdentifierKind } from "@helpers/types";
 import { getWorkers, type WorkerManager } from "@workers/manager";
@@ -10,7 +9,6 @@ loadEnv(testName);
 
 describe(testName, () => {
   let workers: WorkerManager;
-  let hasFailures = false;
   beforeAll(async () => {
     workers = await getWorkers(
       [
@@ -32,7 +30,7 @@ describe(testName, () => {
     try {
       await closeEnv(testName, workers);
     } catch (e) {
-      hasFailures = logError(e, expect);
+      logError(e, expect);
       throw e;
     }
   });
@@ -42,7 +40,7 @@ describe(testName, () => {
       const client = await getWorkers(["randomclient"], testName, "message");
       expect(client).toBeDefined();
     } catch (e) {
-      hasFailures = logError(e, expect);
+      logError(e, expect);
       throw e;
     }
   });
@@ -65,7 +63,7 @@ describe(testName, () => {
       ]);
       expect(canMessage.get(randomAddress)).toBe(true);
     } catch (e) {
-      hasFailures = logError(e, expect);
+      logError(e, expect);
       throw e;
     }
   });
@@ -76,7 +74,7 @@ describe(testName, () => {
         .client.preferences.inboxState(true);
       expect(inboxState.installations.length).toBeGreaterThan(0);
     } catch (e) {
-      hasFailures = logError(e, expect);
+      logError(e, expect);
       throw e;
     }
   });
@@ -89,7 +87,7 @@ describe(testName, () => {
       console.log(inboxState[0].inboxId);
       expect(inboxState[0].inboxId).toBe(bobInboxId);
     } catch (e) {
-      hasFailures = logError(e, expect);
+      logError(e, expect);
       throw e;
     }
   });

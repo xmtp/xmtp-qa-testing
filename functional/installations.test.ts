@@ -1,7 +1,6 @@
 import { loadEnv } from "@helpers/client";
 import { getWorkers } from "@workers/manager";
-import { Files } from "openai/resources/files.mjs";
-import { beforeAll, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 const testName = "installations";
 loadEnv(testName);

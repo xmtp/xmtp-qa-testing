@@ -1,6 +1,7 @@
 import { loadEnv } from "@helpers/client";
 import { logError } from "@helpers/logger";
-import type { XmtpEnv } from "@helpers/types";
+import type { Conversation, XmtpEnv } from "@helpers/types";
+import type { WorkerClient } from "@workers/main";
 import { getWorkers, type NetworkConditions } from "@workers/manager";
 import { describe, expect, it } from "vitest";
 
@@ -39,9 +40,8 @@ const networkConditions: Record<string, NetworkConditions> = {
 };
 
 describe(testName, () => {
-  let hasFailures = false;
   let groupId: string;
-  let workerInstances: Record<string, unknown> = {};
+  let workerInstances: Record<string, WorkerClient> = {};
 
   for (const user of Object.keys(users)) {
     describe(`User: ${user} [${users[user].env}]`, () => {
@@ -65,7 +65,11 @@ describe(testName, () => {
 
           // Store worker instances
           workerConfigs.forEach((w) => {
-            workerInstances[w.name] = workers.get(w.name, w.id);
+            const worker = workers.get(w.name, w.id);
+            if (!worker) {
+              throw new Error(`Worker ${w.name} not found`);
+            }
+            workerInstances[w.name] = worker as unknown as WorkerClient;
           });
 
           // Apply initial network conditions
@@ -92,7 +96,13 @@ describe(testName, () => {
           const worker = workerInstances[workerConfigs[0].name] as {
             client?: {
               conversations?: {
-                newGroup: (inboxIds: string[], options: any) => Promise<any>;
+                newGroup: (
+                  inboxIds: string[],
+                  options: {
+                    groupName: string;
+                    groupDescription: string;
+                  },
+                ) => Promise<Conversation>;
               };
             };
           };
@@ -106,7 +116,7 @@ describe(testName, () => {
           groupId = group.id;
           console.log("Created group with ID:", groupId);
         } catch (e) {
-          hasFailures = logError(e, expect);
+          logError(e, expect);
           throw e;
         }
       });
@@ -181,7 +191,16 @@ describe(testName, () => {
             });
 
             // Send message
-            const worker = workerInstances[workerConfigs[0].name] as any;
+            const worker = workerInstances[workerConfigs[0].name] as {
+              client?: {
+                conversations?: {
+                  getConversationById: (id: string) => Promise<Conversation>;
+                };
+              };
+            };
+            if (!worker.client?.conversations) {
+              throw new Error("Worker client or conversations not available");
+            }
             const group =
               await worker.client.conversations.getConversationById(groupId);
             await group?.send(testCase.message);
@@ -192,7 +211,7 @@ describe(testName, () => {
             );
           }
         } catch (e) {
-          hasFailures = logError(e, expect);
+          logError(e, expect);
           throw e;
         }
       });

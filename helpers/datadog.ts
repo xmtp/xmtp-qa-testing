@@ -383,7 +383,7 @@ export function initDataDog(
 export function sendMetric(
   metricName: string,
   metricValue: number,
-  tags: Record<string, any>,
+  tags: Record<string, string>,
 ): void {
   if (!state.isInitialized) return;
 
@@ -413,7 +413,7 @@ export function sendMetric(
     if (!state.collectedMetrics[operationKey]) {
       state.collectedMetrics[operationKey] = {
         values: [],
-        threshold: tags.threshold || 0,
+        threshold: Number(tags.threshold) || 0,
         members: memberCount,
       };
     }
@@ -553,8 +553,8 @@ export async function sendPerformanceMetric(
       metric_subtype: operationType,
       description: metricDescription,
       members: members,
-      success: isSuccess,
-      threshold: threshold,
+      success: isSuccess.toString(),
+      threshold: threshold.toString(),
       region: state.currentGeo,
     });
 
@@ -581,8 +581,8 @@ export async function sendPerformanceMetric(
           network_phase: networkPhase,
           country_iso_code: countryCode,
           members: members,
-          success: networkMetricValue <= networkThreshold,
-          threshold: networkThreshold,
+          success: networkMetricValue <= networkThreshold ? "true" : "false",
+          threshold: networkThreshold.toString(),
           region: state.currentGeo,
         });
       }
@@ -613,8 +613,8 @@ export function sendDeliveryMetric(
     test: testName,
     metric_type: metricType,
     metric_subtype: metricSubType,
-    success: isSuccess,
-    threshold: threshold,
+    success: isSuccess.toString(),
+    threshold: threshold.toString(),
   });
 }
 
@@ -634,12 +634,12 @@ export async function getNetworkStats(
   try {
     const result = await execAsync(curlCommand);
     stdout = result.stdout;
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Even if curl returns an error, we might still have useful stdout
-    if (error.stdout) {
-      stdout = error.stdout;
+    if (error instanceof Error && "stdout" in error) {
+      stdout = error.stdout as string;
       console.warn(
-        `⚠️ Curl command returned error code ${error.code}, but stdout is available.`,
+        `⚠️ Curl command returned error code ${String(error)}, but stdout is available.`,
       );
     } else {
       console.error(`❌ Curl command failed without stdout:`, error);

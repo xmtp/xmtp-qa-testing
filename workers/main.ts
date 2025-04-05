@@ -7,10 +7,10 @@ import {
   getEncryptionKeyFromHex,
 } from "@helpers/client";
 import {
+  Client,
   defaultValues,
   Dm,
   sdkVersions,
-  type Client,
   type Consent,
   type Conversation,
   type DecodedMessage,
@@ -304,12 +304,14 @@ export class WorkerClient extends Worker {
       const sdkVersion = this.workerData.sdkVersion;
       // Select the appropriate SDK client based on version
       let ClientClass;
-      if (sdkVersion === "100") {
-        ClientClass = sdkVersions.v100.Client;
-        console.debug(`[${this.nameId}] Using SDK version 1.0.0`);
+      if (sdkVersion) {
+        ClientClass = sdkVersions[sdkVersion as "100" | "104" | "105"].Client;
       } else {
-        // Default to latest version
-        ClientClass = sdkVersions.v104.Client;
+        ClientClass = Client;
+      }
+
+      if (!ClientClass) {
+        throw new Error(`Unsupported SDK version: ${sdkVersion}`);
       }
 
       // Force version to include the SDK version for easier identification
@@ -784,10 +786,15 @@ export class WorkerClient extends Worker {
     );
   }
 
-  clearDB() {
+  /**
+   * Clears the database for this worker
+   * @returns true if the database was cleared, false otherwise
+   */
+  clearDB(): Promise<boolean> {
     const dataPath = path.resolve(process.cwd(), ".data/" + this.name);
     if (fs.existsSync(dataPath)) {
       fs.rmSync(dataPath, { recursive: true, force: true });
     }
+    return Promise.resolve(true);
   }
 }

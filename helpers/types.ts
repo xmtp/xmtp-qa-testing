@@ -23,29 +23,45 @@ import {
   Dm as Dm100,
   Group as Group100,
 } from "@xmtp/node-sdk-100";
-
-// Add version-specific exports
-console.log(
-  "SDK v100:",
-  Client100?.version,
-  "imported from @xmtp/node-sdk-100",
-);
-console.log("SDK v104:", Client?.version, "imported from @xmtp/node-sdk");
+import {
+  Client as Client104,
+  Conversation as Conversation104,
+  Dm as Dm104,
+  Group as Group104,
+} from "@xmtp/node-sdk-104";
+import {
+  Client as Client105,
+  Conversation as Conversation105,
+  Dm as Dm105,
+  Group as Group105,
+} from "@xmtp/node-sdk-105";
 
 export const sdkVersions = {
-  v100: {
+  100: {
     Client: Client100,
     Conversation: Conversation100,
     Dm: Dm100,
     Group: Group100,
   },
-  v104: {
-    Client,
-    Conversation,
-    Dm,
-    Group,
+  104: {
+    Client: Client104,
+    Conversation: Conversation104,
+    Dm: Dm104,
+    Group: Group104,
+  },
+  105: {
+    Client: Client105,
+    Conversation: Conversation105,
+    Dm: Dm105,
+    Group: Group105,
   },
 };
+for (const version in sdkVersions) {
+  console.log(
+    `SDK v${version}:`,
+    sdkVersions[version as "100" | "104" | "105"].Client?.version,
+  );
+}
 export type { WorkerManager, Worker };
 export type WorkerStreamMessage = {
   type: "stream_message";

@@ -1,6 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: true
----
-[TS_Performance.test.ts](mdc:tests/TS_Performance.test.ts)

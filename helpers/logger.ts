@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import type { ExpectStatic } from "vitest";
 import winston from "winston";
 import Transport from "winston-transport";
 import type { LogInfo } from "./types";
@@ -91,7 +92,7 @@ export const createLogger = (testName: string) => {
   return sharedLogger;
 };
 
-function filterLog(args: any[]): string {
+function filterLog(args: unknown[]): string {
   // First, check if this is a SQLCipher memory lock related log
   const logStr = args.join(" ").toString();
   if (
@@ -142,7 +143,7 @@ function filterLog(args: any[]): string {
             return "[Circular Object]";
           }
         }
-        return String(arg);
+        return arg as string;
       })
       .filter(Boolean)
       .join(" ")
@@ -161,7 +162,7 @@ const getLogFilePath = (testName: string): string => {
 
 export const overrideConsole = (logger: winston.Logger) => {
   try {
-    console.log = (...args: any[]) => {
+    console.log = (...args: unknown[]) => {
       const message = filterLog(args);
       if (message) {
         // If this is a console.time/end log, always use warn if duration > 300ms.
@@ -172,7 +173,7 @@ export const overrideConsole = (logger: winston.Logger) => {
         }
       }
     };
-    console.info = (...args: any[]) => {
+    console.info = (...args: unknown[]) => {
       const message = filterLog(args);
       if (message) {
         // Also promote timing logs from console.info to warn.
@@ -215,7 +216,7 @@ if (!fs.existsSync("logs")) {
   fs.mkdirSync("logs");
 }
 
-export const logError = (e: unknown, expect: any): boolean => {
+export const logError = (e: unknown, expect: ExpectStatic): boolean => {
   if (e instanceof Error) {
     console.error(
       `[vitest] Test failed in ${expect.getState().currentTestName}`,
