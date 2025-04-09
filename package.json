@@ -6,7 +6,8 @@
   "scripts": {
     "bot": "tsx scripts/run-bot",
     "build": "tsc",
-    "clean": "rimraf .data/ ||: && rimraf logs/ ||:",
+    "clean": "rimraf .data/ ||: && rimraf logs/ ||  :",
+    "cli": "tsx scripts/bot-cli.ts",
     "format": "prettier -w .",
     "format:check": "prettier -c .",
     "functional": "npx vitest run ./functional/*.test.ts --pool=forks --fileParallelism=false",
@@ -39,7 +40,7 @@
     "rimraf": "^6.0.1",
     "tsx": "^4.19.2",
     "uint8arrays": "^5.1.0",
-    "viem": "^2.22.17",
+    "viem": "^2.26.2",
     "winston": "^3.17.0",
     "yargs": "^17.7.2"
   },
@@ -50,7 +51,7 @@
     "@playwright/test": "^1.50.1",
     "@railway/cli": "^3.22.2",
     "@types/eslint__js": "^8.42.3",
-    "@types/node": "^22.13.0",
+    "@types/node": "^22.14.0",
     "@vitest/ui": "^3.0.6",
     "datadog-metrics": "^0.12.1",
     "eslint": "^9.19.0",
@@ -60,7 +61,7 @@
     "playwright-chromium": "^1.50.1",
     "prettier": "^3.4.2",
     "prettier-plugin-packagejson": "^2.5.8",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.22.0",
     "vitest": "^3.0.8"
   },
