@@ -10,6 +10,8 @@
 | 🌎 Geolocation    | [![Status](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_Geolocation.yml/badge.svg)](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_Geolocation.yml)             | Every 30 min  | [Workflow](https://github.com/xmtp/xmtp-qa-testing/blob/main/.github/workflows/TS_Geolocation.yml)       |
 | 🔍 agent-examples | [![Status](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/check-agent-examples.yml/badge.svg)](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/check-agent-examples.yml) | Every 30 min  | [Workflow](https://github.com/xmtp/xmtp-qa-testing/blob/main/.github/workflows/check-agent-examples.yml) |
 
+> See all test suites in [suites](https://github.com/xmtp/xmtp-qa-testing/tree/main/suites)
+
 ## Testing scope
 
 This monorepo contains a comprehensive collection of tools for testing and monitoring the XMTP protocol and its implementations.
