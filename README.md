@@ -218,6 +218,7 @@ _Note: Testing regularly in groups of `40` active members listening to one user 
 - **Vitest:** We use Vitest for running tests with an interactive UI - [see section](https://xmtp-qa-testingus-east-production.up.railway.app/__vitest__/#/)
 - **Railway:** Visit our Railway project with all our services - [see section](https://railway.com/project/cc97c743-1be5-4ca3-a41d-0109e41ca1fd)
 - **Bots:** Bots for testing with multiple agents - [see section](https://github.com/xmtp/xmtp-qa-testing/tree/main/bots/)
+- **Suites**: Specific goal oriented tests to achieve and replicate different environments and features. - [see section](https://github.com/xmtp/xmtp-qa-testing/tree/main/suites/)
 
 ## Development
 
