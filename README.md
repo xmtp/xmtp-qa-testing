@@ -2,6 +2,8 @@
 
 ## Automated workflows
 
+<div style="overflow-x: auto;">
+
 | Test suite        | Status                                                                                                                                                                                        | Run frequency | Code                                                                                                     |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- | -------------------------------------------------------------------------------------------------------- |
 | 🚀 Performance    | [![Status](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_Performance.yml/badge.svg)](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_Performance.yml)             | Every 15 min  | [Test code](https://github.com/xmtp/xmtp-qa-testing/tree/main/suites/TS_Performance.test.ts)             |
@@ -11,6 +13,8 @@
 | 🔍 agent-examples | [![Status](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/check-agent-examples.yml/badge.svg)](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/check-agent-examples.yml) | Every 30 min  | [Workflow](https://github.com/xmtp/xmtp-qa-testing/blob/main/.github/workflows/check-agent-examples.yml) |
 | ⏳ Group Streams  | [![Status](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_Large.yml/badge.svg)](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_Large.yml)                         | Every 30 min  | [Workflow](https://github.com/xmtp/xmtp-qa-testing/blob/main/.github/workflows/TS_Large.yml)             |
 | 🚑 Agent health   | [![Status](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_AgentHealth.yml/badge.svg)](https://github.com/xmtp/xmtp-qa-testing/actions/workflows/TS_AgentHealth.yml)             | Every 30 min  | [Workflow](https://github.com/xmtp/xmtp-qa-testing/blob/main/.github/workflows/TS_AgentHealth.yml)       |
+
+</div>
 
 ## Testing scope
 
@@ -112,6 +116,8 @@ We can test all XMTP bindings using three main applications. We use [xmtp.chat](
 
 ### Core SDK Operations Performance
 
+<div style="overflow-x: auto;">
+
 | Operation                | Description                            | Avg (ms) | Target | Status                 |
 | ------------------------ | -------------------------------------- | -------- | ------ | ---------------------- |
 | clientCreate             | Creating a client                      | 588.18   | <350ms | ⚠️ Performance Concern |
@@ -128,7 +134,11 @@ We can test all XMTP bindings using three main applications. We use [xmtp.chat](
 | sendGroupMessage         | Sending a group message                | 85.27    | <200ms | ✅ On Target           |
 | receiveGroupMessage      | Processing group message streams       | 124.00   | <200ms | ✅ On Target           |
 
+</div>
+
 ### Group Creation & SyncAll Performance
+
+<div style="overflow-x: auto;">
 
 | Size | Create(ms) | SyncAll(ms) | Status                 |
 | ---- | ---------- | ----------- | ---------------------- |
@@ -141,9 +151,13 @@ We can test all XMTP bindings using three main applications. We use [xmtp.chat](
 | 350  | 6294.62    | 2298.25     | ⚠️ Performance Concern |
 | 400  | 7015.99    | 1586.66     | ⚠️ Performance Concern |
 
+</div>
+
 _Note: `syncAll` is measured only as the first cold start of the client (fresh inbox)._
 
 ### Other Group Operations Performance
+
+<div style="overflow-x: auto;">
 
 | Size | Send message (ms) | Update name (ms) | Remove members (ms) | Status       |
 | ---- | ----------------- | ---------------- | ------------------- | ------------ |
@@ -155,26 +169,34 @@ _Note: `syncAll` is measured only as the first cold start of the client (fresh i
 | 300  | 97.09             | 244.24           | 247.22              | ✅ On Target |
 | 400  | 101.34            | 263.91           | 308.01              | ✅ On Target |
 
+</div>
+
 _Note: This measurments are taken only from the sender side._
 
 ### Group stream performance
 
-| Group Size | Receive message (ms) | New name metadata (ms) | New added members (ms) | Status                 |
-| ---------- | -------------------- | ---------------------- | ---------------------- | ---------------------- |
-| 50         | 58.00                | 87.75                  | 254.00                 | ✅ On Target           |
-| 100        | 56.00                | 107.75                 | 294.00                 | ✅ On Target           |
-| 150        | 72.25                | 110.00                 | 338.25                 | ✅ On Target           |
-| 200        | 93.00                | 129.00                 | 423.25                 | ✅ On Target           |
-| 250        | 89.50                | 143.75                 | 465.25                 | ⚠️ Performance Concern |
-| 300        | 85.00                | 173.25                 | 515.25                 | ⚠️ Performance Concern |
-| 350        | 99.50                | 191.75                 | 522.25                 | ⚠️ Performance Concern |
-| 400        | 98.00                | 203.25                 | 537.50                 | ⚠️ Performance Concern |
+<div style="overflow-x: auto;">
+
+| Size | Receive message (ms) | New name metadata (ms) | New added members (ms) | Status                 |
+| ---- | -------------------- | ---------------------- | ---------------------- | ---------------------- |
+| 50   | 58.00                | 87.75                  | 254.00                 | ✅ On Target           |
+| 100  | 56.00                | 107.75                 | 294.00                 | ✅ On Target           |
+| 150  | 72.25                | 110.00                 | 338.25                 | ✅ On Target           |
+| 200  | 93.00                | 129.00                 | 423.25                 | ✅ On Target           |
+| 250  | 89.50                | 143.75                 | 465.25                 | ⚠️ Performance Concern |
+| 300  | 85.00                | 173.25                 | 515.25                 | ⚠️ Performance Concern |
+| 350  | 99.50                | 191.75                 | 522.25                 | ⚠️ Performance Concern |
+| 400  | 98.00                | 203.25                 | 537.50                 | ⚠️ Performance Concern |
+
+</div>
 
 _Note: This measurements are taken only from the receiver side (fresh inbox) and type of stream at the time of testing._
 
 ## Networks performance
 
 ### Network performance
+
+<div style="overflow-x: auto;">
 
 | Performance Metric | Current Performance | Target | Status       |
 | ------------------ | ------------------- | ------ | ------------ |
@@ -184,7 +206,11 @@ _Note: This measurements are taken only from the receiver side (fresh inbox) and
 | Processing         | 35.17ms avg         | <100ms | ✅ On Target |
 | Server Call        | 159.22ms avg        | <250ms | ✅ On Target |
 
+</div>
+
 ### Regional Network Performance
+
+<div style="overflow-x: auto;">
 
 | Region        | Server Call (ms) | TLS (ms) | ~ us-east | Status                 |
 | ------------- | ---------------- | -------- | --------- | ---------------------- |
@@ -194,9 +220,13 @@ _Note: This measurements are taken only from the receiver side (fresh inbox) and
 | asia          | 152.32           | 119.43   | -3.9%     | ✅ On Target           |
 | south-america | 754.6            | 573.1    | +160.3%   | ⚠️ Performance Concern |
 
+</div>
+
 _Note: Baseline is `us-east` region and `production` network._
 
 ### Dev vs Production Network Performance Comparison
+
+<div style="overflow-x: auto;">
 
 | Region        | Dev (ms) | Production (ms) | Difference | Status                 |
 | ------------- | -------- | --------------- | ---------- | ---------------------- |
@@ -206,11 +236,15 @@ _Note: Baseline is `us-east` region and `production` network._
 | asia          | 152.32   | 172.09          | +13.0%     | ⚠️ Performance Concern |
 | south-america | 754.6    | 573.1           | -24.1%     | ✅ Production Better   |
 
+</div>
+
 _Note: `Production` network consistently shows better network performance across all regions, with improvements ranging from 5.5% to 9.1%._
 
 ## Message reliability
 
 ### Message delivery testing
+
+<div style="overflow-x: auto;">
 
 | Test Area            | Current Performance | Target         | Status       |
 | -------------------- | ------------------- | -------------- | ------------ |
@@ -221,9 +255,13 @@ _Note: `Production` network consistently shows better network performance across
 | Poll Order           | 100% in order       | 99.9% in order | ✅ On Target |
 | Recovery Order       | 100% in order       | 99.9% in order | ✅ On Target |
 
+</div>
+
 _Note: Testing regularly in groups of `40` active members listening to one user sending 100 messages_
 
 ### Success criteria summary
+
+<div style="overflow-x: auto;">
 
 | Metric               | Current Performance         | Target                 | Status                 |
 | -------------------- | --------------------------- | ---------------------- | ---------------------- |
@@ -238,20 +276,7 @@ _Note: Testing regularly in groups of `40` active members listening to one user 
 | US & Europe          | less than 20% variance      | <20% difference        | ✅ On Target           |
 | Dev vs Production    | Production 4.5-16.1% better | Production ≥ Dev       | ✅ On Target           |
 
-## 🧪 XMTP Test Suites
-
-Different end-to-end test suites for validating the XMTP protocol functionality, performance, and reliability.
-
-| Suite              | Purpose                                                    | Link to test file                                         |
-| ------------------ | ---------------------------------------------------------- | --------------------------------------------------------- |
-| **TS_AgentHealth** | Tests the health of the agent ecosystem                    | [TS_AgentHealth](./TS_AgentHealth/TS_AgentHealth.test.ts) |
-| **TS_Delivery**    | Verifies message delivery reliability                      | [TS_Delivery](./TS_Delivery/TS_Delivery.test.ts)          |
-| **TS_Fork**        | Investigates group conversation forking through membership | [TS_Fork](./TS_Fork/TS_Fork.test.ts)                      |
-| **TS_Gm**          | Tests basic messaging and cross-version compatibility      | [TS_Gm](./TS_Gm/TS_Gm.test.ts)                            |
-| **TS_Performance** | Measures independent operational performance               | [TS_Performance](./TS_Performance/TS_Performance.test.ts) |
-| **TS_Large**       | Tests performance of group operations                      | [TS_Large](./TS_Large/TS_Large.test.ts)                   |
-
-All test suites provide metrics to monitoring dashboards and can be executed both manually and through automated CI/CD workflows.
+</div>
 
 ## Tools & utilities
 
@@ -260,6 +285,7 @@ All test suites provide metrics to monitoring dashboards and can be executed bot
 - **Vitest:** We use Vitest for running tests with an interactive UI - [see section](https://xmtp-qa-testingus-east-production.up.railway.app/__vitest__/#/)
 - **Railway:** Visit our Railway project with all our services - [see section](https://railway.com/project/cc97c743-1be5-4ca3-a41d-0109e41ca1fd)
 - **Bots:** Bots for testing with multiple agents - [see section](https://github.com/xmtp/xmtp-qa-testing/tree/main/bots/)
+- **Test suites:** See our test suites - [see section](https://github.com/xmtp/xmtp-qa-testing/tree/main/suites/)
 
 ## Development
 
