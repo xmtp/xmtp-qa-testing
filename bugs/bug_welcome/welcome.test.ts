@@ -1,5 +1,5 @@
 import { loadEnv } from "@helpers/client";
-import { getFixedNames, sleep } from "@helpers/tests";
+import { getFixedNames } from "@helpers/tests";
 import { typeofStream } from "@workers/main";
 import { getWorkers, type WorkerManager } from "@workers/manager";
 import type { Group } from "@xmtp/node-sdk";

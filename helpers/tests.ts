@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import oldInboxes from "@helpers/inboxes.json";
+import newInboxes from "@helpers/inboxes.json";
 import type { Worker, WorkerManager } from "@workers/manager";
 import { type Client, type Conversation, type Group } from "@xmtp/node-sdk";
 import {
@@ -441,10 +441,10 @@ export const sleep = (ms: number = 1000): Promise<void> => {
 };
 
 export function getInboxIds(count: number) {
-  return oldInboxes.slice(0, count).map((inbox) => inbox.inboxId);
+  return newInboxes.slice(0, count).map((inbox) => inbox.inboxId);
 }
 export function getAddresses(count: number) {
-  return oldInboxes.slice(0, count).map((inbox) => inbox.accountAddress);
+  return newInboxes.slice(0, count).map((inbox) => inbox.accountAddress);
 }
 
 /**
@@ -505,10 +505,10 @@ export const simulateMissingCursorMessage = async (
 export const getFixedNames = (count: number): string[] => {
   return [...defaultNames].slice(0, count);
 };
-export function removeDataFolder(): void {
+export async function removeDataFolder(): Promise<void> {
   const dataPath = path.join(process.cwd(), ".data");
   if (fs.existsSync(dataPath)) {
-    fs.rmSync(dataPath, { recursive: true, force: true });
+    await fs.promises.rm(dataPath, { recursive: true, force: true });
   }
 }
 export function getMultiVersion(count: number): string[] {

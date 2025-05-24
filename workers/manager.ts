@@ -2,7 +2,7 @@ import fs from "fs";
 import { appendFile } from "fs/promises";
 import path from "path";
 import { generateEncryptionKeyHex } from "@helpers/client";
-import { sdkVersionOptions, sdkVersions, sleep } from "@helpers/tests";
+import { sdkVersions, sleep } from "@helpers/tests";
 import { type Client, type Group, type XmtpEnv } from "@xmtp/node-sdk";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { typeOfResponse, typeofStream, typeOfSync, WorkerClient } from "./main";
